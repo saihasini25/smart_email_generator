@@ -1,0 +1,7 @@
+# requirements.txt
+# ----------------
+# This file lists the external Python packages required to run our app.
+# You can install all of them at once using: pip install -r requirements.txt
+
+streamlit>=1.35.0
+google-generativeai>=0.5.0
