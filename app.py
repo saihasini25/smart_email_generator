@@ -364,15 +364,30 @@ if st.session_state.subject or st.session_state.body:
             help="You can copy this text directly or edit it!"
         )
         
-        # Build the exact plain text payload for downloading
-        full_email_text = f"Subject: {st.session_state.subject}\n\n{st.session_state.body}"
+        # Step 9.1: Import Python's built-in library to safely encode text for web links.
+        import urllib.parse
         
-        # Provide a premium download button
-        st.download_button(
-            label="📥 Download Email (.txt)",
-            data=full_email_text,
-            file_name="generated_email.txt",
-            mime="text/plain"
+        # Step 9.2: Check if the recipient name contains an '@' symbol (meaning the user entered an email address).
+        # If not, we leave the recipient address blank so they can choose their recipient in their mail app.
+        recipient_email = ""
+        recipient_val = st.session_state.get("recipient", "")
+        if "@" in recipient_val:
+            recipient_email = recipient_val
+            
+        # Step 9.3: URL-encode the subject and body to handle spaces, punctuation, and newlines properly.
+        encoded_subject = urllib.parse.quote(st.session_state.subject)
+        encoded_body = urllib.parse.quote(st.session_state.body)
+        
+        # Step 9.4: Construct the standard 'mailto' web link.
+        mailto_link = f"mailto:{recipient_email}?subject={encoded_subject}&body={encoded_body}"
+        
+        # Step 9.5: Provide a beautiful 'Send Email' button using Streamlit's built-in link_button.
+        # This will open their default mail client (like Outlook, Mail app, or Gmail) with everything pre-filled!
+        st.link_button(
+            label="✉️ Send Email",
+            url=mailto_link,
+            type="primary",
+            help="Click to open your default email application with this subject and body pre-filled!"
         )
 
 # Step 10: Create a professional and clean Footer
@@ -382,4 +397,3 @@ st.markdown("""
         <p style="font-size: 0.75rem; margin-top: 0.5rem; color: #94a3b8;">Created with love for beginner developers. Connect to the Google AI Studio to request edits!</p>
     </div>
 """, unsafe_allow_html=True)
-
