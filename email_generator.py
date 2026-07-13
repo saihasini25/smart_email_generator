@@ -5,6 +5,7 @@
 # and builds a prompt, then sends it to the Gemini API to get a response.
 
 import os
+from dotenv import load_dotenv
 import google.generativeai as genai
 
 def generate_email_with_gemini(recipient_name, sender_name, email_purpose, additional_details, email_type, tone, length):
@@ -15,13 +16,13 @@ def generate_email_with_gemini(recipient_name, sender_name, email_purpose, addit
     
     # Step 1: Retrieve the API Key from the environment variables.
     # We store the API key in an environment variable named GEMINI_API_KEY for security.
+    load_dotenv()
     api_key = os.getenv("GEMINI_API_KEY")
     
     # Step 2: Validate that the API key exists.
     # If the API key is missing, we raise an error to inform the user.
     if not api_key:
-        raise ValueError("API Key is missing! Please set your GEMINI_API_KEY environment variable.")
-        
+        api_key=st.secrets["GEMINI_API_KEY"]
     # Step 3: Configure the Gemini SDK with our API key.
     genai.configure(api_key=api_key)
     
